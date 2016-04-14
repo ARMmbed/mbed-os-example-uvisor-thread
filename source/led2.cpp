@@ -15,7 +15,7 @@ static void led2_main(const void *);
 
 UVISOR_BOX_NAMESPACE(NULL);
 UVISOR_BOX_HEAPSIZE(8192);
-UVISOR_BOX_MAIN(led2_main, osPriorityNormal);
+UVISOR_BOX_MAIN(led2_main, osPriorityNormal, UVISOR_BOX_STACK_SIZE);
 UVISOR_BOX_CONFIG(box_led2, acl, UVISOR_BOX_STACK_SIZE, box_context);
 
 static void led2_main(const void *)
