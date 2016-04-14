@@ -1,0 +1,10 @@
+{
+    "custom_targets": {
+        "K64F_SECURE": {
+            "inherits": ["K64F"],
+            "extra_labels_add":["K64F", "UVISOR_SUPPORTED"],
+            "features_add": ["UVISOR"],
+            "macros_add": ["CMSIS_NVIC_VIRTUAL", "CMSIS_VECTAB_VIRTUAL"]
+        }
+    }
+}
