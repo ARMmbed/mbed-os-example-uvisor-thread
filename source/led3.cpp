@@ -23,6 +23,9 @@ static void led3_main(const void *)
 {
     DigitalOut led3(LED3);
     led3 = LED_OFF;
+    const uint32_t kB = 1024;
+
+    SecureAllocator alloc = secure_allocator_create_with_pages(4*kB, 1*kB);
 
     while (1) {
         static const size_t size = 500;
@@ -31,5 +34,6 @@ static void led3_main(const void *)
         led3 = !led3;
         ++uvisor_ctx->heartbeat;
         alloc_fill_wait_verify_free(size, seed, 500);
+        specific_alloc_fill_wait_verify_free(alloc, 5*kB, seed, 100);
     }
 }

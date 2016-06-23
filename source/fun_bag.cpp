@@ -102,3 +102,33 @@ UVISOR_EXTERN void alloc_fill_wait_verify_free(size_t size, uint16_t seed, uint3
     /* Free the memory region. */
     free(memory);
 }
+
+UVISOR_EXTERN void specific_alloc_fill_wait_verify_free(SecureAllocator allocator,
+                                                        size_t size, uint16_t seed, uint32_t wait_ms)
+{
+    void * memory;
+
+    /* Allocate a memory region using the provided allocator. */
+    memory = secure_malloc(allocator, size);
+    if (!memory) {
+        printf("malloc failed: %s:%u\n", __FILE__, __LINE__);
+        uvisor_error(USER_NOT_ALLOWED);
+    }
+
+    /* Fill the entire memory region with a with PRN sequence. */
+    prn_fill(memory, seed, size);
+
+    /* Optionally wait. */
+    if (wait_ms > 0) {
+        Thread::wait(wait_ms);
+    }
+
+    /* Verify the data we wrote is still there. */
+    if (!prn_verify(memory, seed, size)) {
+        printf("Verification failed: %s:%u\n", __FILE__, __LINE__);
+        uvisor_error(USER_NOT_ALLOWED);
+    }
+
+    /* Free the memory region. */
+    secure_free(allocator, memory);
+}

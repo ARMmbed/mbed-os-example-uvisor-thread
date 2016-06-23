@@ -40,6 +40,9 @@ static void led1_main(const void *)
     led1 = LED_OFF;
     uvisor_ctx->thread2 = new Thread(run_1);
     uvisor_ctx->thread3 = new Thread(run_1);
+    const uint32_t kB = 1024;
+
+    SecureAllocator alloc = secure_allocator_create_with_pages(4*kB, 1*kB);
 
     while (1) {
         static const size_t size = 20;
@@ -48,5 +51,6 @@ static void led1_main(const void *)
         led1 = !led1;
         ++uvisor_ctx->heartbeat;
         alloc_fill_wait_verify_free(size, seed, 200);
+        specific_alloc_fill_wait_verify_free(alloc, 5*kB, seed, 100);
     }
 }

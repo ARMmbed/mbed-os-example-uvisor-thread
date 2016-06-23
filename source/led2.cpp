@@ -23,6 +23,21 @@ static void led2_main(const void *)
 {
     DigitalOut led2(LED2);
     led2 = LED_OFF;
+    const uint32_t kB = 1024;
+    SecureAllocator alloc;
+
+    {
+        /* Allocate one page. */
+        alloc = secure_allocator_create_with_pages(4*kB, 1*kB);
+        /* Allocate another page. */
+        SecureAllocator alloc2 = secure_allocator_create_with_pages(4*kB, 1*kB);
+        /* Deallocate alloc1 page, creating a hole. */
+        secure_allocator_destroy(alloc);
+        /* Allocate two pages. */
+        alloc = secure_allocator_create_with_pages(UVISOR_PAGE_SIZE + 12*kB, 6*kB);
+        /* Deallocate alloc2 page, creating another hole. */
+        secure_allocator_destroy(alloc2);
+    }
 
     while (1) {
         static const size_t size = 300;
@@ -31,5 +46,11 @@ static void led2_main(const void *)
         led2 = !led2;
         ++uvisor_ctx->heartbeat;
         alloc_fill_wait_verify_free(size, seed, 300);
+
+        /* Allocate in first page */
+        specific_alloc_fill_wait_verify_free(alloc, 14*kB, seed, 0);
+
+        /* Allocate in second page */
+        specific_alloc_fill_wait_verify_free(alloc, 14*kB, seed, 100);
     }
 }
