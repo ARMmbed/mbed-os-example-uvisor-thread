@@ -33,7 +33,7 @@ static void led3_main(const void *)
 
         led3 = !led3;
         ++uvisor_ctx->heartbeat;
-        alloc_fill_wait_verify_free(size, seed, 500);
+        alloc_fill_wait_verify_free(size, seed, 503);
         specific_alloc_fill_wait_verify_free(alloc, 5*kB, seed, 100);
     }
 }

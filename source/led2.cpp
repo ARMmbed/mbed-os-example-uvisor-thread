@@ -45,12 +45,12 @@ static void led2_main(const void *)
 
         led2 = !led2;
         ++uvisor_ctx->heartbeat;
-        alloc_fill_wait_verify_free(size, seed, 300);
+        alloc_fill_wait_verify_free(size, seed, 311);
 
         /* Allocate in first page */
         specific_alloc_fill_wait_verify_free(alloc, 14*kB, seed, 0);
 
         /* Allocate in second page */
-        specific_alloc_fill_wait_verify_free(alloc, 14*kB, seed, 100);
+        specific_alloc_fill_wait_verify_free(alloc, 14*kB, seed, 101);
     }
 }

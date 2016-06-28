@@ -61,6 +61,6 @@ static void led1_main(const void *)
 
         led1 = !led1;
         ++uvisor_ctx->heartbeat;
-        alloc_fill_wait_verify_free(size, seed, 200);
+        alloc_fill_wait_verify_free(size, seed, 211);
     }
 }
