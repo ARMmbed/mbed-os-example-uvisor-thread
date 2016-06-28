@@ -1,3 +1,4 @@
+#include "fun_bag.h"
 #include "uvisor-lib/uvisor-lib.h"
 #include "mbed.h"
 #include "rtos.h"
@@ -24,12 +25,10 @@ static void led3_main(const void *)
     led3 = LED_OFF;
 
     while (1) {
-        void * memory;
+        static const size_t size = 500;
 
         led3 = !led3;
-        memory = malloc(500);
         ++uvisor_ctx->heartbeat;
-        Thread::wait(500);
-        free(memory);
+        alloc_wait_free(size, 500);
     }
 }

@@ -1,3 +1,4 @@
+#include "fun_bag.h"
 #include "uvisor-lib/uvisor-lib.h"
 #include "mbed.h"
 #include "rtos.h"
@@ -24,11 +25,11 @@ UVISOR_BOX_CONFIG(box_led1, acl, UVISOR_BOX_STACK_SIZE, box_context);
 static void run_1(const void *)
 {
     while (1) {
-        void * memory;
+        const int toggle = uvisor_ctx->toggle;
+        uint16_t size = toggle ? 150 : 99;
 
-        memory = malloc(uvisor_ctx->toggle ? 150 : 99);
         uvisor_ctx->toggle = !uvisor_ctx->toggle;
-        free(memory);
+        alloc_wait_free(size, 0);
     }
 }
 
@@ -40,12 +41,10 @@ static void led1_main(const void *)
     uvisor_ctx->thread3 = new Thread(run_1);
 
     while (1) {
-        void * memory;
+        static const size_t size = 20;
 
         led1 = !led1;
         ++uvisor_ctx->heartbeat;
-        memory = malloc(20);
-        Thread::wait(200);
-        free(memory);
+        alloc_wait_free(size, 200);
     }
 }
