@@ -27,9 +27,10 @@ static void run_1(const void *)
     while (1) {
         const int toggle = uvisor_ctx->toggle;
         uint16_t size = toggle ? 150 : 99;
+        uint16_t seed = (size << 8) | (uvisor_ctx->heartbeat & 0xFF);
 
         uvisor_ctx->toggle = !uvisor_ctx->toggle;
-        alloc_wait_free(size, 0);
+        alloc_fill_wait_verify_free(size, seed, 0);
     }
 }
 
@@ -42,9 +43,10 @@ static void led1_main(const void *)
 
     while (1) {
         static const size_t size = 20;
+        uint16_t seed = (size << 8) | (uvisor_ctx->heartbeat & 0xFF);
 
         led1 = !led1;
         ++uvisor_ctx->heartbeat;
-        alloc_wait_free(size, 200);
+        alloc_fill_wait_verify_free(size, seed, 200);
     }
 }

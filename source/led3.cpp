@@ -26,9 +26,10 @@ static void led3_main(const void *)
 
     while (1) {
         static const size_t size = 500;
+        uint16_t seed = (size << 8) | (uvisor_ctx->heartbeat & 0xFF);
 
         led3 = !led3;
         ++uvisor_ctx->heartbeat;
-        alloc_wait_free(size, 500);
+        alloc_fill_wait_verify_free(size, seed, 500);
     }
 }

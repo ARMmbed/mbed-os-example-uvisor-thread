@@ -24,9 +24,10 @@
 /* This file contains abstract functions for oft-repeated patterns in our
  * example. */
 
-/* Allocate a memory region of a given size, wait the specified length of time
- * (if non-zero), and then free the memory region. If any operations fail, call
- * uvisor_halt. */
-UVISOR_EXTERN void alloc_wait_free(size_t size, uint32_t wait_ms);
+/* Allocate a memory region of a given size, write to the entire buffer using a
+ * PRN sequence based on the given seed, wait the specified length of time (if
+ * non-zero), verify the data previously written to the buffer, and then free
+ * the memory region. If any operations fail, call uvisor_halt. */
+UVISOR_EXTERN void alloc_fill_wait_verify_free(size_t size, uint16_t seed, uint32_t wait_ms);
 
 #endif
