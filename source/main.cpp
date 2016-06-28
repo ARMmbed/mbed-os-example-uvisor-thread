@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include "fun_bag.h"
 #include "uvisor-lib/uvisor-lib.h"
 #include "mbed.h"
 #include "rtos.h"
@@ -33,8 +34,23 @@ UVISOR_SET_PRIV_SYS_IRQ_HOOKS(SVC_Handler, PendSV_Handler, SysTick_Handler);
 /* Enable uVisor. */
 UVISOR_SET_MODE_ACL(UVISOR_ENABLED, g_main_acl);
 
+static void main_alloc(const void *)
+{
+    const uint32_t kB = 1024;
+    uint16_t seed = 0x10;
+    SecureAllocator alloc = secure_allocator_create_with_pages(4*kB, 1*kB);
+
+    while (1) {
+        alloc_fill_wait_verify_free(500, seed, 577);
+        specific_alloc_fill_wait_verify_free(alloc, 5*kB, seed, 97);
+        seed++;
+    }
+}
+
 int main(void)
 {
+    Thread * thread = new Thread(main_alloc);
+
     printf("\r\n***** threaded blinky uvisor-rtos example *****\r\n");
 
     size_t count = 0;
