@@ -40,9 +40,20 @@ static void led1_main(const void *)
     led1 = LED_OFF;
     uvisor_ctx->thread2 = new Thread(run_1);
     uvisor_ctx->thread3 = new Thread(run_1);
-    const uint32_t kB = 1024;
 
+    /* Create page-backed allocator. */
+    const uint32_t kB = 1024;
     SecureAllocator alloc = secure_allocator_create_with_pages(4*kB, 1*kB);
+    /* Prepare the thread definition structure. */
+    osThreadDef_t thread_def;
+    thread_def.stacksize = DEFAULT_STACK_SIZE;
+    /* Allocate the stack inside the page allocator! */
+    thread_def.stack_pointer = (uint32_t *) secure_malloc(alloc, DEFAULT_STACK_SIZE);
+    thread_def.tpriority = osPriorityNormal;
+    thread_def.pthread = &run_1;
+    /* Create a thread with the page allocator as heap. */
+    osThreadContextCreate(&thread_def, NULL, alloc);
+
 
     while (1) {
         static const size_t size = 20;
@@ -51,6 +62,5 @@ static void led1_main(const void *)
         led1 = !led1;
         ++uvisor_ctx->heartbeat;
         alloc_fill_wait_verify_free(size, seed, 200);
-        specific_alloc_fill_wait_verify_free(alloc, 5*kB, seed, 100);
     }
 }
