@@ -26,18 +26,22 @@ static void led2_main(const void *)
     const uint32_t kB = 1024;
     SecureAllocator alloc;
 
-    {
-        /* Allocate one page. */
-        alloc = secure_allocator_create_with_pages(4*kB, 1*kB);
-        /* Allocate another page. */
-        SecureAllocator alloc2 = secure_allocator_create_with_pages(4*kB, 1*kB);
-        /* Deallocate alloc1 page, creating a hole. */
-        secure_allocator_destroy(alloc);
-        /* Allocate two pages. */
-        alloc = secure_allocator_create_with_pages(UVISOR_PAGE_SIZE + 12*kB, 6*kB);
-        /* Deallocate alloc2 page, creating another hole. */
-        secure_allocator_destroy(alloc2);
-    }
+    /* Create one allocator with two non-consecutive pages,
+     * by attempting to create a hole in the page allocator.
+     * This simulates a fragmented page heap, but note, that
+     * this method is not guaranteed to create a fragemented
+     * page heap!
+     */
+    /* Allocate one page. */
+    alloc = secure_allocator_create_with_pages(4*kB, 1*kB);
+    /* Allocate another page. */
+    SecureAllocator alloc2 = secure_allocator_create_with_pages(4*kB, 1*kB);
+    /* Deallocate alloc1 page, creating a hole. */
+    secure_allocator_destroy(alloc);
+    /* Allocate two pages. */
+    alloc = secure_allocator_create_with_pages(UVISOR_PAGE_SIZE + 12*kB, 6*kB);
+    /* Deallocate alloc2 page, creating another hole. */
+    secure_allocator_destroy(alloc2);
 
     while (1) {
         static const size_t size = 300;
