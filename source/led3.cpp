@@ -5,9 +5,6 @@
 #include "main-hw.h"
 
 struct box_context {
-    Thread * thread;
-    Thread * thread2;
-    Thread * thread3;
     uint32_t heartbeat;
     int toggle;
 };
@@ -38,8 +35,8 @@ static void led3_main(const void *)
 {
     DigitalOut led3(LED3);
     led3 = LED_OFF;
-    uvisor_ctx->thread2 = new Thread(run_3);
-    uvisor_ctx->thread3 = new Thread(run_3);
+    Thread * thread1 = new Thread(run_3);
+    Thread * thread2 = new Thread(run_3);
 
     /* Create page-backed allocator. */
     const uint32_t kB = 1024;
