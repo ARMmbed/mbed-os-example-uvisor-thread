@@ -19,7 +19,7 @@ UVISOR_BOX_HEAPSIZE(8192);
 UVISOR_BOX_MAIN(led3_main, osPriorityNormal, UVISOR_BOX_STACK_SIZE);
 UVISOR_BOX_CONFIG(box_led3, acl, UVISOR_BOX_STACK_SIZE, box_context);
 
-static void run_3(const void *)
+static void run_3(void)
 {
     while (1) {
         const int toggle = uvisor_ctx->toggle;
@@ -33,10 +33,23 @@ static void run_3(const void *)
 
 static void led3_main(const void *)
 {
+    osStatus status;
     DigitalOut led3(LED3);
     led3 = LED_OFF;
-    Thread * thread1 = new Thread(run_3);
-    Thread * thread2 = new Thread(run_3);
+
+    Thread * thread1 = new Thread();
+    status = thread1->start(run_3);
+    if (status != osOK) {
+        printf("Could not start box_led3 thread1.\r\n");
+        uvisor_error(USER_NOT_ALLOWED);
+    }
+
+    Thread * thread2 = new Thread();
+    status = thread2->start(run_3);
+    if (status != osOK) {
+        printf("Could not start box_led3 thread2.\r\n");
+        uvisor_error(USER_NOT_ALLOWED);
+    }
 
     /* Create page-backed allocator. */
     const uint32_t kB = 1024;
@@ -47,7 +60,7 @@ static void led3_main(const void *)
     /* Allocate the stack inside the page allocator! */
     thread_def.stack_pointer = (uint32_t *) secure_malloc(alloc, DEFAULT_STACK_SIZE);
     thread_def.tpriority = osPriorityNormal;
-    thread_def.pthread = &run_3;
+    thread_def.pthread = (void (*)(const void *)) &run_3;
     /* Create a thread with the page allocator as heap. */
     osThreadContextCreate(&thread_def, NULL, alloc);
 

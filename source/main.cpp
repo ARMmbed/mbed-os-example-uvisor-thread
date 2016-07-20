@@ -34,7 +34,7 @@ UVISOR_SET_PRIV_SYS_IRQ_HOOKS(SVC_Handler, PendSV_Handler, SysTick_Handler);
 /* Enable uVisor. */
 UVISOR_SET_MODE_ACL(UVISOR_ENABLED, g_main_acl);
 
-static void main_alloc(const void *)
+static void main_alloc(void)
 {
     const uint32_t kB = 1024;
     uint16_t seed = 0x10;
@@ -49,7 +49,13 @@ static void main_alloc(const void *)
 
 int main(void)
 {
-    Thread * thread = new Thread(main_alloc);
+    osStatus status;
+    Thread * thread = new Thread();
+    status = thread->start(main_alloc);
+    if (status != osOK) {
+        printf("Could not start main thread.\r\n");
+        uvisor_error(USER_NOT_ALLOWED);
+    }
 
     printf("\r\n***** threaded blinky uvisor-rtos example *****\r\n");
 
