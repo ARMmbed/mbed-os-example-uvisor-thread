@@ -1,9 +1,8 @@
 {
-    "custom_targets": {
-        "K64F_SECURE": {
-            "inherits": ["K64F"],
-            "extra_labels_add":["K64F", "UVISOR_SUPPORTED"],
-            "features_add": ["UVISOR"]
+    "target_overrides": {
+        "K64F": {
+            "target.features_add": ["UVISOR"],
+            "target.extra_labels_add": ["UVISOR_SUPPORTED"]
         }
     }
 }
