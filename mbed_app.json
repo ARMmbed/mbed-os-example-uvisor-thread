@@ -4,5 +4,9 @@
             "target.features_add": ["UVISOR"],
             "target.extra_labels_add": ["UVISOR_SUPPORTED"]
         }
-    }
+    },
+    "macros": [
+        "FEATURE_UVISOR=1",
+        "TARGET_UVISOR_SUPPORTED=1"
+    ]
 }
