@@ -39,7 +39,7 @@ static void led2_main(const void *)
     /* Deallocate alloc1 page, creating a hole. */
     secure_allocator_destroy(alloc);
     /* Allocate two pages. */
-    alloc = secure_allocator_create_with_pages(uvisor_get_page_size() + 12*kB, 6*kB);
+    alloc = secure_allocator_create_with_pages(uvisor_get_page_size() + 3*kB, 6*kB);
     /* Deallocate alloc2 page, creating another hole. */
     secure_allocator_destroy(alloc2);
 
@@ -52,9 +52,9 @@ static void led2_main(const void *)
         alloc_fill_wait_verify_free(size, seed, 311);
 
         /* Allocate in first page */
-        specific_alloc_fill_wait_verify_free(alloc, 14*kB, seed, 0);
+        specific_alloc_fill_wait_verify_free(alloc, 6*kB, seed, 0);
 
         /* Allocate in second page */
-        specific_alloc_fill_wait_verify_free(alloc, 14*kB, seed, 101);
+        specific_alloc_fill_wait_verify_free(alloc, 6*kB, seed, 101);
     }
 }
