@@ -39,7 +39,7 @@ static void led2_main(const void *)
     /* Deallocate alloc1 page, creating a hole. */
     secure_allocator_destroy(alloc);
     /* Allocate two pages. */
-    alloc = secure_allocator_create_with_pages(UVISOR_PAGE_SIZE + 12*kB, 6*kB);
+    alloc = secure_allocator_create_with_pages(uvisor_get_page_size() + 12*kB, 6*kB);
     /* Deallocate alloc2 page, creating another hole. */
     secure_allocator_destroy(alloc2);
 
