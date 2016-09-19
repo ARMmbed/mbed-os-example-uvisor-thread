@@ -22,15 +22,6 @@
 
 /* Create ACLs for main box. */
 MAIN_ACL(g_main_acl);
-
-
-/* Register privleged system IRQ hooks. */
-extern "C" void SVC_Handler(void);
-extern "C" void PendSV_Handler(void);
-extern "C" void SysTick_Handler(void);
-
-UVISOR_SET_PRIV_SYS_IRQ_HOOKS(SVC_Handler, PendSV_Handler, SysTick_Handler);
-
 /* Enable uVisor. */
 UVISOR_SET_MODE_ACL(UVISOR_ENABLED, g_main_acl);
 UVISOR_SET_PAGE_HEAP(8*1024, 5);
