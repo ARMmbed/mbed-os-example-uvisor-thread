@@ -58,7 +58,7 @@ static int prn_verify(const void * mem, uint16_t seed, size_t len)
 {
     size_t i;
     uint16_t state = seed;
-    uint8_t * m = (uint8_t *) mem;
+    const uint8_t * m = (const uint8_t *) mem;
     bool matches = true;
 
     /* Check all of the bytes, even if we find a match sooner. This tests that
