@@ -1,6 +1,8 @@
 python:
 - "2.7"
 
+sudo: required
+
 script:
 # Tells mbed-cli that the current directory is a project even though you didnt do an `mbed import` (helps suppress some warning messages)
 - mbed config root .
