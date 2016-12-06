@@ -31,7 +31,7 @@ $ screen /dev/tty.usbmodem1422 9600
 You will see an output similar to the following one:
 
 ```
-***** threaded blinky uvisor-rtos example *****
+***** Threaded blinky uVisor example *****
 Main loop count: 0
 Main loop count: 1
 Main loop count: 2

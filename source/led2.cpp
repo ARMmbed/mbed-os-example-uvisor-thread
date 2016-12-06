@@ -14,10 +14,13 @@ static const UvisorBoxAclItem acl[] = {
 
 static void led2_main(const void *);
 
+/* Box configuration
+ * We do not need large stacks in either the main nor the interrupt thread, as
+ * we do not do anything special in them. */
 UVISOR_BOX_NAMESPACE(NULL);
-UVISOR_BOX_HEAPSIZE(8192);
-UVISOR_BOX_MAIN(led2_main, osPriorityNormal, UVISOR_BOX_STACK_SIZE);
-UVISOR_BOX_CONFIG(box_led2, acl, UVISOR_BOX_STACK_SIZE, box_context);
+UVISOR_BOX_HEAPSIZE(8 * 1024);
+UVISOR_BOX_MAIN(led2_main, osPriorityNormal, 512);
+UVISOR_BOX_CONFIG(box_led2, acl, 512, box_context);
 
 static void led2_main(const void *)
 {
@@ -33,13 +36,13 @@ static void led2_main(const void *)
      * page heap!
      */
     /* Allocate one page. */
-    alloc = secure_allocator_create_with_pages(4*kB, 1*kB);
+    alloc = secure_allocator_create_with_pages(4 * kB, 1 * kB);
     /* Allocate another page. */
-    SecureAllocator alloc2 = secure_allocator_create_with_pages(4*kB, 1*kB);
+    SecureAllocator alloc2 = secure_allocator_create_with_pages(4 * kB, 1 * kB);
     /* Deallocate alloc1 page, creating a hole. */
     secure_allocator_destroy(alloc);
     /* Allocate two pages. */
-    alloc = secure_allocator_create_with_pages(uvisor_get_page_size() + 3*kB, 6*kB);
+    alloc = secure_allocator_create_with_pages(uvisor_get_page_size() + 3 * kB, 6 * kB);
     /* Deallocate alloc2 page, creating another hole. */
     secure_allocator_destroy(alloc2);
 
@@ -52,9 +55,9 @@ static void led2_main(const void *)
         alloc_fill_wait_verify_free(size, seed, 311);
 
         /* Allocate in first page */
-        specific_alloc_fill_wait_verify_free(alloc, 6*kB, seed, 0);
+        specific_alloc_fill_wait_verify_free(alloc, 6 * kB, seed, 0);
 
         /* Allocate in second page */
-        specific_alloc_fill_wait_verify_free(alloc, 6*kB, seed, 101);
+        specific_alloc_fill_wait_verify_free(alloc, 6 * kB, seed, 101);
     }
 }
