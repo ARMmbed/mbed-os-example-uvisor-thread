@@ -1,6 +1,6 @@
 {
     "blacklist" : [ {
-        "platforms" : ["DISCO_F429ZI"]
+        "platforms" : []
         }
     ]
 }
