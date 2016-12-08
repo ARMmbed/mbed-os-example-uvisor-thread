@@ -34,7 +34,7 @@ static void main_alloc(void)
     SecureAllocator alloc = secure_allocator_create_with_pages(4 * kB, 1 * kB);
 
     while (1) {
-        alloc_fill_wait_verify_free(500, seed, 577);
+        alloc_fill_wait_verify_free(50, seed, 577);
         specific_alloc_fill_wait_verify_free(alloc, 5 * kB, seed, 97);
         seed++;
     }

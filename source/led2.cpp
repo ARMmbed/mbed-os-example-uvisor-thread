@@ -18,7 +18,7 @@ static void led2_main(const void *);
  * We do not need large stacks in either the main nor the interrupt thread, as
  * we do not do anything special in them. */
 UVISOR_BOX_NAMESPACE(NULL);
-UVISOR_BOX_HEAPSIZE(8 * 1024);
+UVISOR_BOX_HEAPSIZE(3 * 1024);
 UVISOR_BOX_MAIN(led2_main, osPriorityNormal, 512);
 UVISOR_BOX_CONFIG(box_led2, acl, 512, box_context);
 
@@ -47,7 +47,7 @@ static void led2_main(const void *)
     secure_allocator_destroy(alloc2);
 
     while (1) {
-        static const size_t size = 300;
+        static const size_t size = 30;
         uint16_t seed = (size << 8) | (uvisor_ctx->heartbeat & 0xFF);
 
         led2 = !led2;
