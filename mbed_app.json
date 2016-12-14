@@ -1,6 +1,6 @@
 {
     "target_overrides": {
-        "K64F": {
+        "*": {
             "target.features_add": ["UVISOR"],
             "target.extra_labels_add": ["UVISOR_SUPPORTED"]
         }
