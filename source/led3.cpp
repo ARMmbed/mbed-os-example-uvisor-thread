@@ -18,7 +18,7 @@ static void led3_main(const void *);
  * We need at least 1kB in the main thread as we use printf in it. The interrupt
  * stack size can be smaller as we do not do anything special in them. */
 UVISOR_BOX_NAMESPACE(NULL);
-UVISOR_BOX_HEAPSIZE(8 * 1024);
+UVISOR_BOX_HEAPSIZE(3 * 1024);
 UVISOR_BOX_MAIN(led3_main, osPriorityNormal, 1024);
 UVISOR_BOX_CONFIG(box_led3, acl, 512, box_context);
 
@@ -59,7 +59,7 @@ static void led3_main(const void *)
     SecureAllocator alloc = secure_allocator_create_with_pages(4 * kB, 1 * kB);
     /* Prepare the thread definition structure. */
     osThreadDef_t thread_def;
-    thread_def.stacksize = DEFAULT_STACK_SIZE;
+    thread_def.stacksize = 512;
     /* Allocate the stack inside the page allocator! */
     thread_def.stack_pointer = (uint32_t *) secure_malloc(alloc, DEFAULT_STACK_SIZE);
     thread_def.tpriority = osPriorityNormal;

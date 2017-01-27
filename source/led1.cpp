@@ -31,7 +31,7 @@ static void led1_main(const void *)
     SecureAllocator alloc = secure_allocator_create_with_pages(4 * kB, 1 * kB);
 
     while (1) {
-        static const size_t size = 500;
+        static const size_t size = 50;
         uint16_t seed = (size << 8) | (uvisor_ctx->heartbeat & 0xFF);
 
         led1 = !led1;
