@@ -55,6 +55,7 @@ int main(void)
 
     while (1) {
         printf("Main loop count: %d\r\n", count++);
+        Thread::wait(500);
     }
 
     return 0;
