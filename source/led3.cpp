@@ -14,10 +14,13 @@ static const UvisorBoxAclItem acl[] = {
 
 static void led3_main(const void *);
 
+/* Box configuration
+ * We need at least 1kB in the main thread as we use printf in it. The interrupt
+ * stack size can be smaller as we do not do anything special in them. */
 UVISOR_BOX_NAMESPACE(NULL);
-UVISOR_BOX_HEAPSIZE(8192);
-UVISOR_BOX_MAIN(led3_main, osPriorityNormal, UVISOR_BOX_STACK_SIZE);
-UVISOR_BOX_CONFIG(box_led3, acl, UVISOR_BOX_STACK_SIZE, box_context);
+UVISOR_BOX_HEAPSIZE(3 * 1024);
+UVISOR_BOX_MAIN(led3_main, osPriorityNormal, 1024);
+UVISOR_BOX_CONFIG(box_led3, acl, 512, box_context);
 
 static void run_3(void)
 {
@@ -37,15 +40,15 @@ static void led3_main(const void *)
     DigitalOut led3(LED3);
     led3 = LED_OFF;
 
-    Thread * thread1 = new Thread();
-    status = thread1->start(run_3);
+    Thread thread1(osPriorityNormal, 512, NULL);
+    status = thread1.start(run_3);
     if (status != osOK) {
         printf("Could not start box_led3 thread1.\r\n");
         uvisor_error(USER_NOT_ALLOWED);
     }
 
-    Thread * thread2 = new Thread();
-    status = thread2->start(run_3);
+    Thread thread2(osPriorityNormal, 512, NULL);
+    status = thread2.start(run_3);
     if (status != osOK) {
         printf("Could not start box_led3 thread2.\r\n");
         uvisor_error(USER_NOT_ALLOWED);
@@ -53,17 +56,16 @@ static void led3_main(const void *)
 
     /* Create page-backed allocator. */
     const uint32_t kB = 1024;
-    SecureAllocator alloc = secure_allocator_create_with_pages(4*kB, 1*kB);
+    SecureAllocator alloc = secure_allocator_create_with_pages(4 * kB, 1 * kB);
     /* Prepare the thread definition structure. */
     osThreadDef_t thread_def;
-    thread_def.stacksize = DEFAULT_STACK_SIZE;
+    thread_def.stacksize = 512;
     /* Allocate the stack inside the page allocator! */
     thread_def.stack_pointer = (uint32_t *) secure_malloc(alloc, DEFAULT_STACK_SIZE);
     thread_def.tpriority = osPriorityNormal;
     thread_def.pthread = (void (*)(const void *)) &run_3;
     /* Create a thread with the page allocator as heap. */
     osThreadContextCreate(&thread_def, NULL, alloc);
-
 
     while (1) {
         static const size_t size = 20;

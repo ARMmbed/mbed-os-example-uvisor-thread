@@ -22,40 +22,40 @@
 
 /* Create ACLs for main box. */
 MAIN_ACL(g_main_acl);
+
 /* Enable uVisor. */
 UVISOR_SET_MODE_ACL(UVISOR_ENABLED, g_main_acl);
-UVISOR_SET_PAGE_HEAP(8*1024, 5);
+UVISOR_SET_PAGE_HEAP(8 * 1024, 5);
 
 static void main_alloc(void)
 {
     const uint32_t kB = 1024;
     uint16_t seed = 0x10;
-    SecureAllocator alloc = secure_allocator_create_with_pages(4*kB, 1*kB);
+    SecureAllocator alloc = secure_allocator_create_with_pages(4 * kB, 1 * kB);
 
     while (1) {
-        alloc_fill_wait_verify_free(500, seed, 577);
-        specific_alloc_fill_wait_verify_free(alloc, 5*kB, seed, 97);
+        alloc_fill_wait_verify_free(50, seed, 577);
+        specific_alloc_fill_wait_verify_free(alloc, 5 * kB, seed, 97);
         seed++;
     }
 }
 
 int main(void)
 {
-    osStatus status;
-    Thread * thread = new Thread();
-    status = thread->start(main_alloc);
+    Thread thread(osPriorityNormal, 512, NULL);
+    osStatus status = thread.start(main_alloc);
     if (status != osOK) {
         printf("Could not start main thread.\r\n");
         uvisor_error(USER_NOT_ALLOWED);
     }
 
-    printf("\r\n***** threaded blinky uvisor-rtos example *****\r\n");
+    printf("\r\n***** Threaded blinky uVisor example *****\r\n");
 
     size_t count = 0;
 
-    while (1)
-    {
+    while (1) {
         printf("Main loop count: %d\r\n", count++);
+        Thread::wait(500);
     }
 
     return 0;
