@@ -8,7 +8,7 @@ Supported devices:
 |--------|-----------|-----------|
 | `K64F` | `GCC_ARM` | 9600      |
 
-Latest release: [mbed-os-5.3.0](https://github.com/ARMmbed/mbed-os-example-uvisor/releases/tag/mbed-os-5.3.0). Tested with [mbed-cli v1.0.0](https://github.com/ARMmbed/mbed-cli/releases/tag/1.0.0).
+Latest release: [mbed-os-5.3.x](https://github.com/ARMmbed/mbed-os-example-uvisor/releases/latest). Tested with [mbed-cli v1.0.0](https://github.com/ARMmbed/mbed-cli/releases/tag/1.0.0).
 
 ## Quickstart
 
