@@ -51,3 +51,8 @@ When a debugger is connected, you can observe debug output from uVisor. Please n
 ```bash
 $ mbed compile -m K64F -t GCC_ARM --profile mbed-os/tools/profiles/debug.json -c
 ```
+
+## Known issues
+
+- Use of exporters for multiple IDEs is not supported at the moment.
+
