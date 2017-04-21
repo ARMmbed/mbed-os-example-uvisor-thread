@@ -22,11 +22,7 @@ UVISOR_BOX_HEAPSIZE(3 * 1024);
 UVISOR_BOX_MAIN(led3_main, osPriorityNormal, 1024);
 UVISOR_BOX_CONFIG(box_led3, acl, 512, box_context);
 
-/* FIXME: The guard is needed for backwards-compatibility reasons. Remove it
- *        when mbed OS is updated. */
-#ifdef __uvisor_ctx
 #define uvisor_ctx ((box_context *) __uvisor_ctx)
-#endif
 
 static void run_3(void)
 {
