@@ -12,7 +12,7 @@ struct box_context {
 static const UvisorBoxAclItem acl[] = {
 };
 
-static void led1_main(const void *);
+static void led1_main(void *);
 
 /* Box configuration
  * We do not need large stacks in either the main nor the interrupt thread, as
@@ -24,7 +24,7 @@ UVISOR_BOX_CONFIG(box_led1, acl, 512, box_context);
 
 #define uvisor_ctx ((box_context *) __uvisor_ctx)
 
-static void led1_main(const void *)
+static void led1_main(void *)
 {
     DigitalOut led1(LED1);
     led1 = LED_OFF;

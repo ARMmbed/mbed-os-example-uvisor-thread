@@ -12,7 +12,7 @@ struct box_context {
 static const UvisorBoxAclItem acl[] = {
 };
 
-static void led3_main(const void *);
+static void led3_main(void *);
 
 /* Box configuration
  * We need at least 1kB in the main thread as we use printf in it. The interrupt
@@ -36,9 +36,17 @@ static void run_3(void)
     }
 }
 
-static void led3_main(const void *)
+/* A thin wrapper around run_3 that accepts and ignores a context. This avoid a
+ * cast, as mbed's Thread and RTX's osThreadContextNew operate on differently
+ * typed thread functions. */
+static void run_3_context(void *)
 {
-    osStatus status;
+    run_3();
+}
+
+static void led3_main(void *)
+{
+    osStatus_t status;
     DigitalOut led3(LED3);
     led3 = LED_OFF;
 
@@ -60,14 +68,16 @@ static void led3_main(const void *)
     const uint32_t kB = 1024;
     SecureAllocator alloc = secure_allocator_create_with_pages(4 * kB, 1 * kB);
     /* Prepare the thread definition structure. */
-    osThreadDef_t thread_def;
-    thread_def.stacksize = 512;
+    osThreadAttr_t thread_attr = {0};
+    os_thread_t thread_def = {0};
+    thread_def.stack_size = 512;
     /* Allocate the stack inside the page allocator! */
-    thread_def.stack_pointer = (uint32_t *) secure_malloc(alloc, DEFAULT_STACK_SIZE);
-    thread_def.tpriority = osPriorityNormal;
-    thread_def.pthread = (void (*)(const void *)) &run_3;
+    thread_attr.stack_mem = (uint32_t *) secure_malloc(alloc, 512);
+    thread_def.priority = osPriorityNormal;
+    thread_attr.cb_size = sizeof(thread_def);
+    thread_attr.cb_mem = &thread_def;
     /* Create a thread with the page allocator as heap. */
-    osThreadContextCreate(&thread_def, NULL, alloc);
+    osThreadContextNew(run_3_context, NULL, &thread_attr, alloc);
 
     while (1) {
         static const size_t size = 20;
