@@ -12,7 +12,7 @@ struct box_context {
 static const UvisorBoxAclItem acl[] = {
 };
 
-static void led1_main(const void *);
+static void led1_main(void *);
 
 /* Box configuration
  * We do not need large stacks in either the main nor the interrupt thread, as
@@ -22,13 +22,9 @@ UVISOR_BOX_HEAPSIZE(3 * 1024);
 UVISOR_BOX_MAIN(led1_main, osPriorityNormal, 512);
 UVISOR_BOX_CONFIG(box_led1, acl, 512, box_context);
 
-/* FIXME: The guard is needed for backwards-compatibility reasons. Remove it
- *        when mbed OS is updated. */
-#ifdef __uvisor_ctx
 #define uvisor_ctx ((box_context *) __uvisor_ctx)
-#endif
 
-static void led1_main(const void *)
+static void led1_main(void *)
 {
     DigitalOut led1(LED1);
     led1 = LED_OFF;

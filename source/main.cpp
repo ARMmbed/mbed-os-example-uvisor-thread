@@ -43,7 +43,7 @@ static void main_alloc(void)
 int main(void)
 {
     Thread thread(osPriorityNormal, 512, NULL);
-    osStatus status = thread.start(main_alloc);
+    osStatus_t status = thread.start(main_alloc);
     if (status != osOK) {
         printf("Could not start main thread.\r\n");
         uvisor_error(USER_NOT_ALLOWED);

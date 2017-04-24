@@ -1,6 +1,6 @@
 {
     "blacklist" : [ {
-        "platforms" : ["EFM32GG_STK3700", "DISCO_F429ZI"]
+        "platforms" : ["DISCO_F429ZI"]
         }
     ]
 }
