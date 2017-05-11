@@ -22,11 +22,7 @@ UVISOR_BOX_HEAPSIZE(3 * 1024);
 UVISOR_BOX_MAIN(led3_main, osPriorityNormal, 1024);
 UVISOR_BOX_CONFIG(box_led3, acl, 512, box_context);
 
-/* FIXME: The guard is needed for backwards-compatibility reasons. Remove it
- *        when mbed OS is updated. */
-#ifdef __uvisor_ctx
 #define uvisor_ctx ((box_context *) __uvisor_ctx)
-#endif
 
 static void run_3(void)
 {
@@ -39,6 +35,16 @@ static void run_3(void)
         alloc_fill_wait_verify_free(size, seed, 0);
     }
 }
+
+#if (osCMSIS >= 0x20000U)
+/* A thin wrapper around run_3 that accepts and ignores a context. This avoid a
+ * cast, as mbed's Thread and RTX's osThreadContextNew operate on differently
+ * typed thread functions. */
+static void run_3_context(void *)
+{
+    run_3();
+}
+#endif
 
 static void led3_main(const void *)
 {
@@ -64,6 +70,22 @@ static void led3_main(const void *)
     const uint32_t kB = 1024;
     SecureAllocator alloc = secure_allocator_create_with_pages(4 * kB, 1 * kB);
     /* Prepare the thread definition structure. */
+    /* FIXME: Remove the dependency on the CMSIS OS version after mbed OS has
+     * completed its migration to CMSIS 5 RTX 2. We only need to keep both
+     * around so that the example will work both before and after the
+     * migration. */
+#if (osCMSIS >= 0x20000U)
+    osThreadAttr_t thread_attr = {0};
+    os_thread_t thread_def = {0};
+    thread_def.stack_size = 512;
+    /* Allocate the stack inside the page allocator! */
+    thread_attr.stack_mem = (uint32_t *) secure_malloc(alloc, 512);
+    thread_def.priority = osPriorityNormal;
+    thread_attr.cb_size = sizeof(thread_def);
+    thread_attr.cb_mem = &thread_def;
+    /* Create a thread with the page allocator as heap. */
+    osThreadContextNew(run_3_context, NULL, &thread_attr, alloc);
+#else
     osThreadDef_t thread_def;
     thread_def.stacksize = 512;
     /* Allocate the stack inside the page allocator! */
@@ -72,6 +94,7 @@ static void led3_main(const void *)
     thread_def.pthread = (void (*)(const void *)) &run_3;
     /* Create a thread with the page allocator as heap. */
     osThreadContextCreate(&thread_def, NULL, alloc);
+#endif
 
     while (1) {
         static const size_t size = 20;
