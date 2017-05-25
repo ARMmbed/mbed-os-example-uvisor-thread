@@ -25,7 +25,7 @@ MAIN_ACL(g_main_acl);
 
 /* Enable uVisor. */
 UVISOR_SET_MODE_ACL(UVISOR_ENABLED, g_main_acl);
-UVISOR_SET_PAGE_HEAP(8 * 1024, 5);
+UVISOR_SET_PAGE_HEAP(2 * 1024, 8);
 
 static void main_alloc(void)
 {
@@ -35,7 +35,7 @@ static void main_alloc(void)
 
     while (1) {
         alloc_fill_wait_verify_free(50, seed, 577);
-        specific_alloc_fill_wait_verify_free(alloc, 5 * kB, seed, 97);
+        specific_alloc_fill_wait_verify_free(alloc, 1 * kB, seed, 97);
         seed++;
     }
 }
