@@ -51,7 +51,7 @@
 #define SECURE_LED         LED2
 #define LED_ON             true
 #define LED_OFF            false
-#define SECURE_SWITCH      SW2
+#define SECURE_SWITCH      SW0
 #define SECURE_SWITCH_PULL PullUp
 
 #define MAIN_ACL(acl_list_name) \
