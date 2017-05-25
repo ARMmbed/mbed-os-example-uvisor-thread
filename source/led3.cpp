@@ -59,13 +59,6 @@ static void led3_main(const void *)
         uvisor_error(USER_NOT_ALLOWED);
     }
 
-    Thread thread2(osPriorityNormal, 512, NULL);
-    status = thread2.start(run_3);
-    if (status != osOK) {
-        printf("Could not start box_led3 thread2.\r\n");
-        uvisor_error(USER_NOT_ALLOWED);
-    }
-
     /* Create page-backed allocator. */
     const uint32_t kB = 1024;
     SecureAllocator alloc = secure_allocator_create_with_pages(4 * kB, 1 * kB);
