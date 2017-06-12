@@ -18,7 +18,7 @@ static void led3_main(const void *);
  * We need at least 1kB in the main thread as we use printf in it. The interrupt
  * stack size can be smaller as we do not do anything special in them. */
 UVISOR_BOX_NAMESPACE(NULL);
-UVISOR_BOX_HEAPSIZE(3 * 1024);
+UVISOR_BOX_HEAPSIZE(2 * 1024);
 UVISOR_BOX_MAIN(led3_main, osPriorityNormal, 1024);
 UVISOR_BOX_CONFIG(box_led3, acl, 512, box_context);
 
@@ -56,13 +56,6 @@ static void led3_main(const void *)
     status = thread1.start(run_3);
     if (status != osOK) {
         printf("Could not start box_led3 thread1.\r\n");
-        uvisor_error(USER_NOT_ALLOWED);
-    }
-
-    Thread thread2(osPriorityNormal, 512, NULL);
-    status = thread2.start(run_3);
-    if (status != osOK) {
-        printf("Could not start box_led3 thread2.\r\n");
         uvisor_error(USER_NOT_ALLOWED);
     }
 
