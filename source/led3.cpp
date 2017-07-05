@@ -70,10 +70,10 @@ static void led3_main(const void *)
 #if (osCMSIS >= 0x20000U)
     osThreadAttr_t thread_attr = {0};
     os_thread_t thread_def = {0};
-    thread_def.stack_size = 512;
+    thread_attr.stack_size = 512;
     /* Allocate the stack inside the page allocator! */
     thread_attr.stack_mem = (uint32_t *) secure_malloc(alloc, 512);
-    thread_def.priority = osPriorityNormal;
+    thread_attr.priority = osPriorityNormal;
     thread_attr.cb_size = sizeof(thread_def);
     thread_attr.cb_mem = &thread_def;
     /* Create a thread with the page allocator as heap. */
