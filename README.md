@@ -1,5 +1,7 @@
 # Threaded blinky with uVisor example
 
+[![Build Status](https://travis-ci.org/ARMmbed/mbed-os-example-uvisor-thread.svg?branch=master)](https://travis-ci.org/ARMmbed/mbed-os-example-uvisor-thread)
+
 This is a simple example to show how to write a uVisor-secured threaded application. Three LEDs will blink from three separate secure processes. Each process also updates some memory private to that process. The memory allocator is also used in this example.
 
 Supported devices:
