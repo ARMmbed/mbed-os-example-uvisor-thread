@@ -23,7 +23,7 @@ before_install:
 - python --version
 
 install:
-- sudo pip install mbed-cli==0.9.10
+- sudo pip install mbed-cli
 - sudo pip install pytest
 - sudo pip install pylint
 - sudo pip install hypothesis
