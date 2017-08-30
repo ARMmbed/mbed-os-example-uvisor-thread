@@ -1,3 +1,5 @@
+language: c
+
 python:
 - "2.7"
 
