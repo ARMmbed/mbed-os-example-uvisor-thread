@@ -1,3 +1,10 @@
+language: c
+
+env:
+  - PLATFORM=K64F
+  - PLATFORM=DISCO_F429ZI
+  - PLATFORM=EFM32GG_STK3700
+
 python:
 - "2.7"
 
@@ -9,21 +16,20 @@ script:
 # Pull in mbed-os and other dependencies
 - mbed deploy
 - sudo pip install -r mbed-os/requirements.txt
-- mbed compile --clean -m K64F -t GCC_ARM
-- mbed compile --clean -m K64F -t GCC_ARM --profile debug
+- mbed compile --clean -m $PLATFORM -t GCC_ARM
+- mbed compile --clean -m $PLATFORM -t GCC_ARM --profile debug
 
 before_install:
-- sudo add-apt-repository -y ppa:terry.guo/gcc-arm-embedded
+- sudo add-apt-repository -y ppa:team-gcc-arm-embedded/ppa
 - sudo apt-get update -qq
-- sudo apt-get install -qq gcc-arm-none-eabi --force-yes
+- sudo apt-get install -qq gcc-arm-embedded --force-yes
 # Print versions we use
 - arm-none-eabi-gcc --version
 - python --version
 
 install:
-- sudo pip install mbed-cli==0.9.10
+- sudo pip install mbed-cli
 - sudo pip install pytest
 - sudo pip install pylint
 - sudo pip install hypothesis
 - sudo pip install mock
-
