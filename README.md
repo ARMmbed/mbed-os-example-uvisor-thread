@@ -50,7 +50,7 @@ Main loop count: 6
 
 ### Debug
 
-When a debugger is connected, you can observe debug output from uVisor. Please note that these messages are sent through semihosting, which halts the program execution if a debugger is not connected. For more information please read the [Debugging uVisor on mbed OS](https://github.com/ARMmbed/uvisor/blob/master/docs/api/DEBUGGING.md) guide. To build a debug version of this example, please enter:
+When a debugger is connected, you can observe debug output from uVisor. Please note that these messages are sent through semihosting, which halts the program execution if a debugger is not connected. For more information please read the [Debugging uVisor on mbed OS](https://github.com/ARMmbed/uvisor/blob/master/docs/lib/DEBUGGING.md) guide. To build a debug version of this example, please enter:
 
 ```bash
 $ mbed compile -m K64F -t GCC_ARM --profile mbed-os/tools/profiles/debug.json -c
