@@ -32,6 +32,7 @@ If you want, you can also observe the serial port output:
 $ screen /dev/tty.usbmodem1422 9600
 ```
 
+
 You will see an output similar to the following one:
 
 ```
