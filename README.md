@@ -59,4 +59,5 @@ $ mbed compile -m K64F -t GCC_ARM --profile mbed-os/tools/profiles/debug.json -c
 ## Known issues
 
 - Use of exporters for multiple IDEs is not supported at the moment.
+- uVisor will halt the system on unregistered interrupts arrival. Do not attempt to push any SW buttons not listed in this document.
 
