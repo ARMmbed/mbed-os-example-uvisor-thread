@@ -1,5 +1,8 @@
 language: c
 
+directories:
+  - $HOME/gcc-arm-none-eabi-6-2017-q2-update
+
 env:
   - PLATFORM=K64F
   - PLATFORM=DISCO_F429ZI
@@ -20,11 +23,11 @@ script:
 - mbed compile --clean -m $PLATFORM -t GCC_ARM --profile debug
 
 before_install:
-- sudo add-apt-repository -y ppa:team-gcc-arm-embedded/ppa
+#- sudo add-apt-repository -y ppa:team-gcc-arm-embedded/ppa
 - sudo apt-get update -qq
-- sudo apt-get install -qq gcc-arm-embedded --force-yes
+#- sudo apt-get install -qq gcc-arm-embedded --force-yes
 # Print versions we use
-- arm-none-eabi-gcc --version
+#- arm-none-eabi-gcc --version
 - python --version
 
 install:
@@ -33,3 +36,9 @@ install:
 - sudo pip install pylint
 - sudo pip install hypothesis
 - sudo pip install mock
+- export GCC_DIR=$HOME/gcc-arm-none-eabi-6-2017-q2-update
+- export GCC_ARCHIVE=$HOME/gcc-arm-none-eabi-6-2017-q2-update-linux.tar.bz2
+- export GCC_URL=https://developer.arm.com/-/media/Files/downloads/gnu-rm/6-2017q2/gcc-arm-none-eabi-6-2017-q2-update-linux.tar.bz2?revision=2cc92fb5-3e0e-402d-9197-bdfc8224d8a5?product=GNU%20Arm%20Embedded%20Toolchain,64-bit,,Linux,6-2017-q2-update
+- wget $GCC_URL -O $GCC_ARCHIVE && tar xfj $GCC_ARCHIVE -C $HOME
+- export PATH=$PATH:$GCC_DIR/bin
+- arm-none-eabi-gcc --version
