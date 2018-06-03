@@ -20,6 +20,9 @@
 #include "rtos.h"
 #include "main-hw.h"
 
+#warning "Warning: uVisor is superseded by the Secure Partition Manager (SPM) defined in the ARM Platform Security Architecture (PSA). \
+          uVisor is deprecated as of Mbed OS 5.10, and being replaced by a native PSA-compliant implementation of SPM."
+
 /* Create ACLs for main box. */
 MAIN_ACL(g_main_acl);
 
