@@ -62,7 +62,7 @@ static void led3_main(const void *)
     SecureAllocator alloc = secure_allocator_create_with_pages(4 * kB, 1 * kB);
     /* Prepare the thread definition structure. */
     osThreadAttr_t thread_attr = {0};
-    os_thread_t thread_def = {0};
+    mbed_rtos_storage_thread_t thread_def = {0};
     thread_attr.stack_size = 512;
     /* Allocate the stack inside the page allocator! */
     thread_attr.stack_mem = (uint32_t *) secure_malloc(alloc, 512);
